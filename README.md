@@ -1,87 +1,95 @@
-# static-website-deployment-docker-kubernetes
+# Static Website Deployment: Docker & Kubernetes
 
-## Static Website Deployment using Docker and Kubernetes
+## 🚀 Project Overview
 
-### Project Overview
-This project demonstrates how to **deploy a static website** using **Docker** and **Kubernetes**.
-It showcases the complete workflow from **Git version control**, **Docker image creation**, **DockerHub integration**, and **Kubernetes deployment** using a simple Nginx-based web server.
+This project demonstrates a complete **DevOps workflow** for deploying a modern static website. It leverages **Docker** for containerization and **Kubernetes** for orchestration, showcasing scalable and reliable deployment practices.
 
-### Repository Layout
-```
-static-website-deployment-docker-kubernetes/
-│
-├── index.html
-├── about.html
-├── membership.html
-├── contact.html
-│
-├── Dockerfile
-├── dep.yaml
-│
-├── diagrams/
-│   ├── project-flowchart.png
-│   └── architecture-diagram.png
-│
-├── docs/
-│   ├── commands.md
-│   └── setup-guide.md
-│
-└── README.md
-```
+The website itself has been modernized with a **premium Glassmorphism design** and includes an **interactive architecture page**.
 
-### Flow Diagram
-![](diagrams/project-flowchart.png)
+### 🏗 Architecture
 
-### Tech Stack
-- Git
-- Docker
-- DockerHub
-- Kubernetes (Docker Desktop)
-- Nginx
+```mermaid
+flowchart TD
+    User([User]) -->|Access :30080| NodePort
+    
+    subgraph K8s_Cluster [Kubernetes Cluster]
+        NodePort[Service: NodePort] -->|Route Traffic| Pod[Pod: Nginx Container]
+        Pod -->|Serve| Website[Static Contents /src]
+    end
 
-## Steps to Deploy
+    subgraph CI_CD_Flow [CI/CD Flow]
+        Dev[Developer] -->|Push Code| Git[GitHub Repo]
+        Git -->|Build| Docker[Docker Build]
+        Docker -->|Push| Hub[DockerHub]
+        Hub -->|Pull| K8s_Cluster
+    end
 
-### 1. Create and Push Website Files to GitHub
-```bash
-git init
-git add .
-git commit -m "Initial static website commit"
-git branch -M main
-git remote add origin https://github.com/devrahul16/static-website-deployment-docker-kubernetes.git
-git push -u origin main
+    style K8s_Cluster fill:#e3f2fd,stroke:#1565c0
+    style CI_CD_Flow fill:#fff8e1,stroke:#ff6f00
 ```
 
-### 2. Clone Repository
-```bash
-git clone https://github.com/devrahul16/static-website-deployment-docker-kubernetes.git
-cd static-website-deployment-docker-kubernetes
+## 📂 Repository Structure
+
+```
+.
+├── Dockerfile              # Docker build instructions
+├── k8s/
+│   └── deployment.yaml     # Kubernetes Deployment & Service manifests (with Probes & Limits)
+├── src/                    # Source code for the website
+│   ├── index.html          # Home page
+│   ├── about.html          # About page
+│   ├── membership.html     # Membership page
+│   ├── contact.html        # Contact page
+│   ├── architecture.html   # NEW: Interactive Architecture Diagram
+│   └── styles.css          # Premium CSS styles
+└── README.md               # Documentation
 ```
 
-### 3. Build Docker Image
+## 🛠 Tech Stack
+
+-   **Frontend**: HTML5, CSS3 (Glassmorphism, Animations), Mermaid.js
+-   **Containerization**: Docker, Nginx (Alpine Linux)
+-   **Orchestration**: Kubernetes (Deployments, Services, Health Probes)
+
+## 🏁 Getting Started
+
+### 1. Build the Docker Image
+
 ```bash
 docker build -t devrahul16/myweb:v1 .
 ```
 
-### 4. Push Docker Image to DockerHub
-```bash
-docker push devrahul16/myweb:v1
-```
+### 2. Run Locally (Docker)
 
-### 5. Deploy on Kubernetes
 ```bash
-kubectl apply -f dep.yaml
+docker run -d -p 8080:80 devrahul16/myweb:v1
+```
+Visit `http://localhost:8080` to see the site.
+
+### 3. Deploy to Kubernetes
+
+```bash
+# Apply the configuration
+kubectl apply -f k8s/deployment.yaml
+
+# Check status
 kubectl get pods
 kubectl get svc
 ```
 
-Open http://127.0.0.1:30080/ to view the site (if using Docker Desktop Kubernetes or similar local cluster).
+Access the application at `http://localhost:30080` (or your minikube/cluster IP).
 
-## Future Enhancements
-- Add CI/CD pipeline (GitHub Actions) to build and push the image automatically.
-- Use a Helm chart for templated deployments.
-- Add Ingress with TLS for production-like routing.
-- Add readiness/liveness probes and resource requests/limits.
-- Scale replicas and demonstrate rolling updates.
+### 4. Push to DockerHub (Optional)
+
+```bash
+docker push devrahul16/myweb:v1
+```
+
+## ✨ New Features
+-   **Modern UI**: Fully responsive, dark-themed design with smooth animations.
+-   **Health Checks**: Liveness and Readiness probes added to Kubernetes config.
+-   **Resource Management**: CPU and Memory limits defined for best practices.
+-   **Interactive Docs**: Check `architecture.html` for a live flow diagram.
 
 ## Author
 Rahul Kumar

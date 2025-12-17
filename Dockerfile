@@ -1,7 +1,7 @@
 FROM nginx:stable-alpine
 
-# Copy the entire website folder
-COPY . /usr/share/nginx/html/
+# Copy the website source folder
+COPY src/ /usr/share/nginx/html/
 
 EXPOSE 80
 
